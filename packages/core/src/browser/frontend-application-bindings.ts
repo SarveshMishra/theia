@@ -19,7 +19,7 @@ import { bindContributionProvider, DefaultResourceProvider, MessageClient, Messa
 import {
     bindPreferenceSchemaProvider, PreferenceProvider,
     PreferenceProviderProvider, PreferenceSchemaProvider, PreferenceScope,
-    PreferenceService, PreferenceServiceImpl
+    PreferenceService, PreferenceServiceImpl, PreferenceValidationService
 } from './preferences';
 
 export function bindMessageService(bind: interfaces.Bind): interfaces.BindingWhenOnSyntax<MessageService> {
@@ -41,6 +41,7 @@ export function bindPreferenceService(bind: interfaces.Bind): void {
     bind(PreferenceServiceImpl).toSelf().inSingletonScope();
     bind(PreferenceService).toService(PreferenceServiceImpl);
     bindPreferenceSchemaProvider(bind);
+    bind(PreferenceValidationService).toSelf().inSingletonScope();
 }
 
 export function bindResourceProvider(bind: interfaces.Bind): void {
