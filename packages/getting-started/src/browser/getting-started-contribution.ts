@@ -14,11 +14,12 @@
  * SPDX-License-Identifier: EPL-2.0 OR GPL-2.0 WITH Classpath-exception-2.0
  ********************************************************************************/
 
-import { injectable, inject } from '@theia/core/shared/inversify';
+import { injectable, inject, postConstruct } from '@theia/core/shared/inversify';
 import { CommandRegistry, MenuModelRegistry } from '@theia/core/lib/common';
 import { CommonMenus, AbstractViewContribution, FrontendApplicationContribution, FrontendApplication } from '@theia/core/lib/browser';
 import { GettingStartedWidget } from './getting-started-widget';
 import { FrontendApplicationStateService } from '@theia/core/lib/browser/frontend-application-state';
+import { TerminalService } from '@theia/terminal/lib/browser/base/terminal-service';
 import { WorkspaceService } from '@theia/workspace/lib/browser';
 
 /**
@@ -35,6 +36,9 @@ export class GettingStartedContribution extends AbstractViewContribution<Getting
     @inject(FrontendApplicationStateService)
     protected readonly stateService: FrontendApplicationStateService;
 
+    @inject(TerminalService)
+    protected readonly terminalService: TerminalService;
+
     @inject(WorkspaceService)
     protected readonly workspaceService: WorkspaceService;
 
@@ -45,6 +49,13 @@ export class GettingStartedContribution extends AbstractViewContribution<Getting
             defaultWidgetOptions: {
                 area: 'main',
             }
+        });
+    }
+
+    @postConstruct()
+    protected init(): void {
+        this.terminalService.onDidCreateTerminal(e => {
+            e.onKey(data => console.log(`terminal 'onKey' event: { id: '${e.id}', key: '${data.key}', code: ${data.domEvent.code} }`));
         });
     }
 

@@ -19,6 +19,9 @@
       "path": "../keymaps"
     },
     {
+      "path": "../terminal"
+    },
+    {
       "path": "../workspace"
     }
   ]
